@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "Producto A",
+    "description": "Descripción del producto A",
+    "code": "PIB1",
+    "price": 100,
+    "status": true,
+    "stock": 10,
+    "category": "Hogar"
+  },
+  {
+    "id": 2,
+    "title": "Producto B",
+    "description": "Descripción del producto B",
+    "code": "PIB2",
+    "price": 200,
+    "status": true,
+    "stock": 20,
+    "category": "Hogar"
+  },
+  {
+    "id": 3,
+    "title": "Producto C",
+    "description": "Descripción del producto C",
+    "code": "PIB3",
+    "price": 300,
+    "status": true,
+    "stock": 30,
+    "category": "Hogar"
+  }
+]
