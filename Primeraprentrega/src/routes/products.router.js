@@ -1,6 +1,10 @@
-const express = require("express");
+/* const express = require("express");
 const fs = require("fs").promises;
-const fsync = require("fs");
+const fsync = require("fs"); */
+
+import express from 'express'
+import { promises as fs } from "fs";
+import * as fsync from "fs";
 const router = express.Router();
 
 let products = [];
@@ -86,4 +90,4 @@ router.delete("/products/:pid", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

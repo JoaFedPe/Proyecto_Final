@@ -1,6 +1,11 @@
-const express = require("express");
+/* const express = require("express");
 const fs = require("fs").promises;
-const fsync = require("fs");
+const fsync = require("fs"); */
+
+import express from 'express'
+import { promises as fs } from "fs";
+import * as fsync from "fs";
+
 const router = express.Router();
 
 let carts = [];
@@ -63,4 +68,4 @@ router.put("/carts/:cid/product/:pid", async (req, res) => {
   res.json({ msg: "producto agregado al carrito" });
 });
 
-module.exports = router;
+export default router;
