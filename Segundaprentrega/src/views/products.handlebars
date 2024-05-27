@@ -3,7 +3,7 @@
     {{#each docs}}
     <div>
         <p>{{this.title}} - {{this.description}} - {{this.code}} - {{this.price}} - {{this.status}} - {{this.stock}}- {{this.category}} </p>
-        <button type="button" id="boton">Añadir al carrito</button>
+        <button type="button" id="boton" onclick="addProduct('{{this._id}}')" >Añadir al carrito</button>
     </div>
     <br/>
     {{/each}}
@@ -26,27 +26,17 @@
 {{/if}}
 
 <script>
-    document.getElementById('boton').addEventListener('click', addProduct)
-
-    function addProduct(){
-        const product = {
-        title: {{this.title}}.value,
-        description: {{this.description}}.value,
-        code: {{this.code}}.value,
-        price: {{this.price}}.value,
-        status: {{this.status}}.value,
-        stock: {{this.stock}}.value,
-        category: {{this.category}}.value
-    }
-
     
 
-    fetch('/carts/:cid/product/:pid',{
+    function addProduct(_id){      
+   
+    fetch('/carts/665087eed80493f67ddcaa0f/product/'+_id,{
+        
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(product),
+        
     })
 }
 </script>

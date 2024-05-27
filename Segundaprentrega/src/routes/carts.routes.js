@@ -19,6 +19,7 @@ router.get('/carts/:cid', async (req, res) => {
     let { cid } = req.params
     try {
         let cart = await cartModel.findOne({_id:cid})
+        
         res.render('carts', {cart: cart.toObject()})
         
     } catch (error) {
@@ -49,17 +50,18 @@ router.put('/carts/:cid/product/:pid', async (req, res) => {
     }
 
     const updatedCart = await cartModel.findOne({ _id: cid })
-    const productAllReadyInCart = updatedCart.productsInCart.findIndex(product => product.productId.equals(productToAdd._id))
+    
+    const productAllReadyInCart = updatedCart.productsInCart.some(product => product.product.equals(productToAdd._id))
      
-    if (!productAllReadyInCart) {       
+    if (productAllReadyInCart) {       
         await cartModel.updateOne(
-            {_id: cid, "productsInCart.productId": productToAdd._id},
+            {_id: cid, "productsInCart.product": productToAdd._id},
             {$inc: { "productsInCart.$.quantity": quantity}}
         )
     } else {        
         await cartModel.updateOne(
             {_id: cid},
-            {$push: { productsInCart: { productId: productToAdd._id, quantity: quantity}}}
+            {$push: { productsInCart: { product: productToAdd._id, quantity: quantity}}}
         )
     }
 
@@ -104,7 +106,7 @@ router.delete('/carts/:cid/product/:pid', async (req, res) => {
 
     const updatedCart = await cartModel.findOneAndUpdate(
         { _id: cid },
-        { $pull: { productsInCart: { productId: productToDel._id }}},
+        { $pull: { productsInCart: { product: productToDel._id }}},
         { new: true }
     )
 
