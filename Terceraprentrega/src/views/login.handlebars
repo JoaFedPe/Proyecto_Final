@@ -1,0 +1,18 @@
+<h2>Iniciar Sesión</h2>
+<form action="/api/sessions/login" method="POST">
+    <label for="email">Email:</label>
+    <input type="email" name="email" required>
+    <label for="password">Contraseña:</label>
+    <input type="password" name="password" required>
+    <button type="submit">Ingresar</button>
+</form>
+
+<h3> Si no tienes cuenta</h3>
+<a href="/register">Regístrate</a>
+
+<h2> Tambien puedes:</h2>
+
+
+<div>
+    <a href="/api/sessions/github"><button>Entrar con Github</button></a>
+</div>
