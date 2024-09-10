@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import {getCarts, getCartById, addCart, modifyCart, deleteCart, deleteProductsInCart, deleteONEproduct} from '../controllers/carts.controller.js'
-import {isUser} from '../middleware/auth.js'
+import {getCarts, getCartById, addCart, modifyCart, deleteCart, deleteProductsInCart, deleteONEproduct, getPurchase} from '../../controllers/carts.controller.js'
+import {isUser} from '../../middleware/auth.js'
 
 const router = Router()
 
@@ -17,5 +17,11 @@ router.delete('/deletecart/:cid', deleteCart)
 router.delete('/carts/:cid', deleteProductsInCart) 
 
 router.delete('/carts/:cid/product/:pid', deleteONEproduct)
+
+router.get('/:cid/purchase', getPurchase)
+
+router.post('/:cid/purchase', getPurchase)
+
+
 
 export default router

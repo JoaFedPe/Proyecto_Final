@@ -1,5 +1,10 @@
 import cartRepository from '../repositories/cart.repository.js'
 import productRepository from '../repositories/product.repository.js'
+import { v4 as uuidv4 } from 'uuid'
+import Ticket from '../models/ticket.model.js'
+import ticketRepository from '../repositories/ticket.repository.js'
+
+
 
 const getCarts = async () => {
     try {
@@ -12,10 +17,10 @@ const getCarts = async () => {
 }
 
 const getCartById = async (params) => {
-    const cid = params
+    const {cid} = params
     
     try {
-        let cart = await cartRepository.getCartById(cid)
+        let cart = await cartRepository.getCartById({cid})
         
         return ('carts', {cart: cart.toObject()})        
                
@@ -102,5 +107,68 @@ const deleteONEproduct = async (params) => {
     return ({result: "success", payload: updatedCart}) 
 }
 
-export default {getCarts, getCartById, addCart, modifyCart, deleteCart, deleteProductsInCart, deleteONEproduct}
+const getPurchase = async (params) => {
+    
+    let {cid, user} = params
+    
+    
+    const cart = await cartRepository.getCartById({cid})
+    
+    if (!cart) {
+        return ({ status: "error", error: "Carrito no encontrado" })
+    }
+
+    let unavailableProducts = []
+    
+    let totalAmount = 0
+    let purchasedProducts = []
+    
+
+    for (let item of cart.productsInCart) {
+        const product = await productRepository.getProductsById({pid: item.product._id});
+        let productId = product.id
+        
+        const quantityInCart = item.quantity;
+        
+        
+        if (quantityInCart > item.product.stock) {
+            unavailableProducts.push({productId: product._id})
+            
+        } else {
+            item.product.stock -= item.quantity
+            await productRepository.modifyStock(productId, item.product.stock)
+            totalAmount += product.price * item.quantity
+            purchasedProducts.push({ product: product, quantity: item.quantity })                  
+            
+        }
+    } 
+
+    if (purchasedProducts.length > 0) {        
+
+        const ticket = new Ticket({
+            code: uuidv4(),
+            amount: totalAmount,
+            purchaser: user.email,
+            products: purchasedProducts.map(p => ({ product: p.product.id, quantity: p.quantity }))
+        })
+                
+        await ticketRepository.createTicket(ticket)
+
+        cart.productsInCart = cart.productsInCart.filter(item => unavailableProducts.includes(item.product._id))
+
+        await cartRepository.deleteProductsInCart({cid})
+
+        user.purchases.push(ticket._id)
+        await user.save()   
+        
+        return ({ status: "succes", succes: `Productos de carrito comprados exitosamente`, payload: ticket.toObject(), unavailableProducts})
+        
+    } else {
+        return { ticket: null, payload: unavailableProducts }
+    }
+
+}
+
+
+export default {getCarts, getCartById, addCart, modifyCart, deleteCart, deleteProductsInCart, deleteONEproduct, getPurchase}
 

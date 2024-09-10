@@ -8,9 +8,9 @@ const getCarts = async (req, res) => {
 }
 
 const getCartById = async (req, res) => {
-    const cid  = req.params
+    const {cid}  = req.params
 
-    let cartsById = await cartsServices.getCartById(cid)
+    let cartsById = await cartsServices.getCartById({cid})
     
     res.render('carts', cartsById)
 }
@@ -59,4 +59,14 @@ const deleteONEproduct = async (req, res) => {
     res.json(productToDelete)
 }
 
-export {getCarts, getCartById, addCart, modifyCart, deleteCart, deleteProductsInCart, deleteONEproduct}
+const getPurchase = async (req, res) => {
+    let { cid } = req.params
+    const user = req.user
+    
+    let purchaseCart = await cartsServices.getPurchase({cid, user})
+
+    res.render('purchase', purchaseCart)
+
+}
+
+export {getCarts, getCartById, addCart, modifyCart, deleteCart, deleteProductsInCart, deleteONEproduct, getPurchase}

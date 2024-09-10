@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
             }
         ]
     },
+    purchases: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ticket' }],
     rol: String
 });
 

@@ -22,10 +22,14 @@ const modifyProduct = async (pid, productToModify) => {
     return productModel.updateOne({_id:pid}, productToModify)
 }
 
+const modifyStock = async (productId, stockToModify) => {
+    return productModel.updateOne({_id:productId}, {stock:stockToModify})
+}
+
 const deleteProduct = async ({pid}) => {
     
     return await productModel.deleteOne({_id:pid})
 }     
 
 
-export default {getProducts, getProductsById, createProduct, productFound, modifyProduct, deleteProduct}
+export default {getProducts, getProductsById, createProduct, productFound, modifyProduct, deleteProduct, modifyStock}

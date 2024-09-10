@@ -39,7 +39,6 @@ const deleteProductsInCart = async ({cid}) => {
    )
 }
 
-//ver por qué no lo borra
 const deleteONEproduct = async ({cid,pid}) => {
      
    return await cartModel.findOneAndUpdate(
