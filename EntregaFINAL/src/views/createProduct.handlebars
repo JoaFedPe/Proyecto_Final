@@ -1,0 +1,48 @@
+<form id="productForm">
+        <label for="titulo">Titulo del producto</label>
+        <input type="text" id="titulo" name="titulo">
+        <label for="description">Descripción del producto</label>
+        <input type="text" id="description" name="descripción">
+        <label for="code">Código del producto</label>
+        <input type="text" id="code" name="codigo">
+        <label for="price">Precio del producto</label>
+        <input type="number" id="price" name="precio">
+        <label for="status">Status del producto</label>
+        <input type="text" id="status" name="estado">
+        <label for="stock">Stock del producto</label>
+        <input type="number" id="stock" name="stock">
+        <label for="category">Categoria del producto</label>
+        <input type="text" id="category" name="categoria">
+        <button type="button"  id={{this.id}} class="createProButton" onclick="createProduct()">Crear Producto</button>
+</form>
+
+
+<script>
+    function createProduct() {
+        const form = document.getElementById('productForm');
+        const productData = {
+            title: form.titulo.value,
+            description: form.description.value,
+            code: form.code.value,
+            price: form.price.value,
+            status: form.status.value,
+            stock: form.stock.value,
+            category: form.category.value
+        };
+
+        fetch(`/createProduct`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(productData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Product created:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>

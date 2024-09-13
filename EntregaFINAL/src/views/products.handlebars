@@ -1,0 +1,65 @@
+{{#if isValid}}
+<div>
+    <h1>Bienvenido, 
+        <p>Nombre: {{user.first_name}}</p>
+        <p>Apellido: {{user.last_name}}</p>
+    </h1>
+
+    <div>
+    <a href="/profile"><button>Ir a su Perfil</button></a>
+    </div>
+
+    <div>
+    <a href="/chatEcommerce"><button>Ir al Chatear</button></a>
+    </div>
+      
+    <div>
+    <a href="/carts/{{user.cart}}"><button>Ver su Carrito</button></a>
+    </div>
+
+    <div>
+    <a href="/createProduct"><button>Crear un producto</button></a>
+    </div>
+    
+
+    {{#each docs}}
+    <div>
+        <p>{{this.title}} - {{this.description}} - {{this.code}} - {{this.price}} - {{this.status}} - {{this.stock}}- {{this.category}} - {{this._id}} </p>
+        <button type="button"  id={{this.id}} class="addProButton" onclick="addProduct('{{this._id}}', '{{../user.cart}}')" >Añadir al carrito</button>
+    </div>
+    <br/>
+    {{/each}}
+</div>
+<br/>
+<div>
+    {{#if hasPrevPage}}
+    <a href={{this.prevLink}}>
+           Anterior</a>
+           {{/if}}
+           &nbsp;
+           {{this.page}}
+           &nbsp;
+           {{#if hasNextPage}}
+           <a href={{this.nextLink}}> Siguiente </a>
+           {{/if}}
+</div>
+{{else}}
+<h1>No hay productos que mostrar</h1>
+{{/if}}
+
+
+<script> 
+    
+    function addProduct(_id, cart){              
+   
+    fetch(`/carts/${cart}/product/`+_id,{
+        
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        
+    })
+}
+</script>
+

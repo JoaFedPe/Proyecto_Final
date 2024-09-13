@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Compra</title>
+</head>
+<body>
+    <h1>Confirmación de Compra</h1>
+    
+    {{#if payload}}
+        <h2>Detalles del Ticket</h2>
+        <p><strong>Codigo de su compra:</strong> {{payload.code}}</p>
+        <p><strong>Valor Total:</strong> ${{payload.amount}}</p>
+        <p><strong>Comprador:</strong> {{payload.purchaser}}</p>
+
+        <h3>Productos Comprados!</h3>
+        <ul>
+            {{#each payload.products}}
+                <li>
+                    <strong>Producto:</strong> {{this.product}}<br>
+                    <strong>Cantidad:</strong> {{this.quantity}}
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p>No se han comprado Productos</p>
+    {{/if}}
+
+    {{#if unavailableProducts}}
+        <h3>Productos No Disponibles</h3>
+        <ul>
+            {{#each unavailableProducts}}
+                <li>
+                    <strong>ID del producto:</strong> {{this.productId}}
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p>Todos los productos solicitados fueron exitosamente comprados</p>
+    {{/if}}
+
+</body>
+</html>
+
+<div>
+<a href="/profile"><button>Ir a su Perfil</button></a>
+</div>
+
+<div>
+<a href="/products"><button>Ver nuevos Productos para comprar!</button></a>
+</div>
+
+

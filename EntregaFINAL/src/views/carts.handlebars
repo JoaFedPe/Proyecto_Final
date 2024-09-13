@@ -1,0 +1,23 @@
+<div>
+<a href="/profile"><button>Ir a su Perfil</button></a>
+</div>
+
+<div>
+<a href="/products"><button>Ir a Productos</button></a>
+</div>
+
+<div>
+    <h2>ID del Carrito: {{cart._id}}</h2>
+    
+    {{#each cart.productsInCart}}
+         <li>
+            <p>ID del producto: {{this.product._id}}</p>
+            <p>Cantidad: {{this.quantity}}</p>
+         </li>
+    {{/each}}
+     
+</div>
+
+<div>
+<a href="/{{cart._id}}/purchase"><button>Realizar compra</button></a>
+</div>
