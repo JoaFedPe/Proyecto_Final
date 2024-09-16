@@ -1,6 +1,9 @@
 import firstCollection from '../models/user.model.js'
 import transport from '../../../config/emailConfig.js'
 import config from '../../../config/config.js'
+import jwt from 'jsonwebtoken'
+
+const JWT_SECRETKEY = process.env.JWT_SECRETKEY
 
 const logUserService =  (user, res) => {
    
@@ -37,11 +40,14 @@ const passForgotten = async (params) => {
             return ({message: "Usuario no encontrado"})
         }
 
+        const token = jwt.sign({ userId: user._id }, JWT_SECRETKEY, { expiresIn: '10s' })
+        const resetLink = `http://localhost:8080/reset-password/${token}`
+
         await transport.sendMail({
             from: config.EMAIL_USER_NODEMAILER,
             to: email,
             subject:"Resetear Contraseña",
-            //html:`<p>Haz click en el siguiente link para restablecer tu contraseña:</P><p><a href="${resetLink}">Reestablecer contraseña</a></p>`,
+            html:`<p>Haz click en el siguiente link para restablecer tu contraseña:</P><p><a href="${resetLink}">Reestablecer contraseña</a></p>`,
             
         })
         
