@@ -1,10 +1,8 @@
 import {Router} from 'express'
 import {isAuthenticated, isNotAuthenticated} from '../../middleware/auth.js'
-import {passForgotten} from '../../controllers/sessions.controllers.js'
+import {passForgotten, resetPass} from '../../controllers/sessions.controllers.js'
 
 const router = Router()
-
-const JWT_SECRETKEY = process.env.JWT_SECRETKEY
 
 router.get('/login', isNotAuthenticated, (req, res) => {
     res.render('login')
@@ -27,20 +25,10 @@ router.get('/passforgotten', (req, res) => {
 })
 
 router.get('/reset-password/:token', (req, res) => {
-    const { token } = req.params
-    let expired = false
-
-    try {
-        jwt.verify(token, process.env.JWT_SECRETKEY)
-    } catch (err) {
-        expired = true
-    }
-
-    res.render('reset-password', {
-        token,
-        expired,
-    })
+    res.render('reset-password')
 })
+
+router.post('/reset-password/:token', resetPass)
 
 router.post('/passforgotten', passForgotten)
 

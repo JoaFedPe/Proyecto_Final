@@ -1,5 +1,3 @@
-//import { logUserService, sessionServices} from "../dao/mongo/services/sessions.services.js"
-//import sessionServices from "../dao/mongo/services/sessions.services.js"
 import sessionServices from "../dao/mongo/services/sessions.services.js"
 
 const logUser = async (req, res) => {
@@ -25,5 +23,14 @@ const passForgotten = async (req, res) => {
 
 }
 
-export {passForgotten, logUser}
-//export {logUser}
+const resetPass = async (req, res) => {    
+    const { token } = req.params
+    const { password } = req.body
+    
+    let passReset = await sessionServices.resetPass({token, password})
+    
+    res.json(passReset)
+}
+
+
+export {passForgotten, logUser, resetPass}

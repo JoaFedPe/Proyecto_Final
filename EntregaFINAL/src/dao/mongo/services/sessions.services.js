@@ -2,6 +2,8 @@ import firstCollection from '../models/user.model.js'
 import transport from '../../../config/emailConfig.js'
 import config from '../../../config/config.js'
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
+import userRepository from '../repositories/user.repository.js'
 
 const JWT_SECRETKEY = process.env.JWT_SECRETKEY
 
@@ -40,8 +42,9 @@ const passForgotten = async (params) => {
             return ({message: "Usuario no encontrado"})
         }
 
-        const token = jwt.sign({ userId: user._id }, JWT_SECRETKEY, { expiresIn: '10s' })
+        const token = jwt.sign({ userId: user._id }, JWT_SECRETKEY, { expiresIn: '1h' })
         const resetLink = `http://localhost:8080/reset-password/${token}`
+       
 
         await transport.sendMail({
             from: config.EMAIL_USER_NODEMAILER,
@@ -58,4 +61,36 @@ const passForgotten = async (params) => {
     }
 }
 
-export default { logUserService, passForgotten }
+const resetPass = async (params) => {
+    let {token, password} = params
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRETKEY)
+        const user = await firstCollection.findById(decoded.userId)
+
+        if (!user) {
+            return res.status(404).send('Usuario no encontrado')
+        }
+        
+        const isSamePassword = await bcrypt.compare(password, user.password)
+        
+        
+        if (isSamePassword) {
+            return ({status: "error", error: "No puedes usar la misma contraseña"})
+        }
+        
+        const hashedPassword = await bcrypt.hash(password, 10)
+        let passReseted = await userRepository.resetPass(user, hashedPassword)
+        
+        
+        return ({message: "Contraseña reestablecida", payload: passReseted})
+    } catch (error) {
+        if (error.name === 'TokenExpiredError') {
+            return ({message: "El enlace ha expirado. Solicita uno nuevo"})
+        }
+
+        console.error('Error al restablecer la contraseña:', error)
+    }
+}
+
+export default { logUserService, passForgotten, resetPass }
