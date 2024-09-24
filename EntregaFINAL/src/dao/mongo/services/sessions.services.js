@@ -8,6 +8,13 @@ import userRepository from '../repositories/user.repository.js'
 
 const JWT_SECRETKEY = process.env.JWT_SECRETKEY
 
+const getUsers = async() => {
+    let users = await userRepository.getUsers()
+
+    return users
+  
+}
+
 const logUserService =  (user, res) => {
    
     try{
@@ -115,4 +122,4 @@ const changeRole = async (params) => {
    
 }
 
-export default { logUserService, passForgotten, resetPass, changeRole, getUserById }
+export default { logUserService, passForgotten, resetPass, changeRole, getUserById, getUsers }

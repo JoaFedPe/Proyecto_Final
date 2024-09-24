@@ -47,7 +47,7 @@ app.use('/', productsRouter)
 app.use('/', cartsRouter)
 app.use('/', viewsRouter)
 app.use('/', messagesRouter)
-app.use('/api/sessions', sessionsRouter)
+app.use('/', sessionsRouter)
 
 let messages = []
 

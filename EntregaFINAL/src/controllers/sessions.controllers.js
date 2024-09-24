@@ -14,6 +14,13 @@ const logUser = async (req, res) => {
     }
 }
 
+const getUsers = async (req, res) => {
+
+    let users = await sessionServices.getUsers()
+
+    res.render('getUsers', {users})
+}
+
 const passForgotten = async (req, res) => {
     const {email} = req.body
 
@@ -49,4 +56,4 @@ const changeRole = async (req, res) => {
 }
 
 
-export {passForgotten, logUser, resetPass, changeRole, getUserById}
+export {passForgotten, logUser, resetPass, changeRole, getUserById, getUsers}

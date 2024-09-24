@@ -1,11 +1,12 @@
 import { Router } from "express"
 import passport from 'passport'
-import {logUser} from '../../controllers/sessions.controllers.js'
-
+import {logUser,getUsers} from '../../controllers/sessions.controllers.js'
+import {isAdmin} from '../../middleware/auth.js'
 
 
 const router = Router() 
 
+router.get ('/getUsers',isAdmin, getUsers)
 
 router.post('/register', passport.authenticate('register', { failureRedirect: 'failregister' }), async (req, res) => {
     res.redirect('/login')
