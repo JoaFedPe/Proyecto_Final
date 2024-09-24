@@ -21,6 +21,18 @@ const getUsers = async (req, res) => {
     res.render('getUsers', {users})
 }
 
+const deleteUser = async (req, res) => { 
+    let uid = req.body 
+
+    try {
+        let userToDelete = await sessionServices.deleteUser(uid)
+        res.json({result: 'success', userToDelete})
+    } catch (error) {
+        res.status(500).json({result: 'error', message: 'Error al eliminar usuario'})
+    }   
+    
+}
+
 const passForgotten = async (req, res) => {
     const {email} = req.body
 
@@ -56,4 +68,4 @@ const changeRole = async (req, res) => {
 }
 
 
-export {passForgotten, logUser, resetPass, changeRole, getUserById, getUsers}
+export {passForgotten, logUser, resetPass, changeRole, getUserById, getUsers, deleteUser}

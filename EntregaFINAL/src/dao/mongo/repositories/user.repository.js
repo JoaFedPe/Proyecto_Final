@@ -12,6 +12,10 @@ const getUsers = async () => {
     return await userModel.find().lean()
 }
 
+const deleteUser = async (uid) => {
+    return await userModel.deleteOne(uid)
+}
+
 const getUserById = async ({uid}) => {
     
     return await userModel.findOne({_id:uid}).lean()
@@ -25,4 +29,4 @@ const changeRole = async (uid, newRole) => {
     )
 }
 
-export default {resetPass, changeRole, getUserById, getUsers}
+export default {resetPass, changeRole, getUserById, getUsers, deleteUser}

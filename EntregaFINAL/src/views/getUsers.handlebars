@@ -1,8 +1,55 @@
 <h2>Usuarios</h2>
 {{#each users}}
+    <p>ID: {{this._id}}</p>
     <p>Nombre: {{this.first_name}}</p>
     <p>Apellido: {{this.last_name}}</p>
     <p>Email: {{this.email}}</p>
     <p>Edad: {{this.age}}</p>
     <p>Rol: {{this.rol}}</p>
+    <button type="button" id="{{this._id}}" class="changeRol" onclick="changeRole('{{this._id}}')">Cambiar Rol</button>
+    <button type="button" id="{{this._id}}" class="deleteUser" onclick="deleteUser('{{this._id}}')">Eliminar Usuario</button>
+    
 {{/each}}
+
+<script>
+    function changeRole(uid) {
+        fetch(`/users/premium/${uid}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.result === "success") {
+                alert('Rol modificado exitosamente!');
+                window.location.reload();
+            } else {
+                alert('Error al modificar el rol.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ocurrió un error al actualizar el rol');
+        });
+    }
+
+    function deleteUser(uid) {
+        fetch(`/`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ _id: uid }) // Send the user ID to delete
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.result === "success") {
+                alert('Usuario eliminado exitosamente!');
+                window.location.reload(); // Refresh the page to show the updated user list
+            } else {
+                alert('Error al eliminar el usuario.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ocurrió un error al eliminar el usuario');
+        });
+    }
+</script>

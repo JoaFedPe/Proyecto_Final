@@ -15,6 +15,14 @@ const getUsers = async() => {
   
 }
 
+const deleteUser = async (params) => {
+    let uid = params
+
+    let userToDelete = await userRepository.deleteUser(uid)
+
+    return userToDelete
+}
+
 const logUserService =  (user, res) => {
    
     try{
@@ -122,4 +130,4 @@ const changeRole = async (params) => {
    
 }
 
-export default { logUserService, passForgotten, resetPass, changeRole, getUserById, getUsers }
+export default { logUserService, passForgotten, resetPass, changeRole, getUserById, getUsers, deleteUser }
