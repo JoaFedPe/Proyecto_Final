@@ -41,12 +41,15 @@ const addCart = async (params) => {
     }
 }
 
-
-const modifyCart = async (params) => {
+const modifyCart = async (params, userEmail) => {
     let {cid, pid, quantity} = params
-    
+
     const productToAdd = await productRepository.getProductsById({pid})    
     
+    if (userEmail === productToAdd.owner){
+        return ({status: "error", error: "No puedes agregar un producto que te pertenece a tu carrito"})
+    }
+
     if (!productToAdd) {
         return ({ status: "error", error: "Producto no encontrado" })
     }
@@ -65,7 +68,8 @@ const modifyCart = async (params) => {
     }    
 
     return ({result: "success", payload: updatedCart})
-} 
+}
+
 
 const deleteCart = async (params) => {
     let cid = params
@@ -126,8 +130,8 @@ const getPurchase = async (params) => {
 
     for (let item of cart.productsInCart) {
         const product = await productRepository.getProductsById({pid: item.product._id});
-        let productId = product.id
-        
+        let productId = product._id
+                
         const quantityInCart = item.quantity;
         
         
@@ -136,7 +140,7 @@ const getPurchase = async (params) => {
             
         } else {
             item.product.stock -= item.quantity
-            await productRepository.modifyStock(productId, item.product.stock)
+            await productRepository.modifyStock(productId, item.product.stock)                  
             totalAmount += product.price * item.quantity
             purchasedProducts.push({ product: product, quantity: item.quantity })                  
             

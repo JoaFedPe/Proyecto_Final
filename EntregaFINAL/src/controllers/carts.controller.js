@@ -23,17 +23,22 @@ const addCart = async (req, res) => {
     res.json(cartAdded)
 }
 
-
 const modifyCart = async (req, res) => {
     let { cid,  pid } = req.params
     let { quantity } = req.body
+    let userEmail = req.session.user.email
 
     if(!quantity) quantity = 1
 
-    let modifiedCart = await cartsServices.modifyCart({cid, pid,quantity})
+    let modifiedCart = await cartsServices.modifyCart({cid, pid,quantity}, userEmail)
+
+    if (modifiedCart.status === "error") {
+        return res.json({ result: "error", message: modifiedCart.error });
+    } else {
+        return res.json({ result: "succes", message: "producto agregado al carrito" });
+    }
     
-    res.json(modifiedCart)
-} 
+}
 
 const deleteCart = async (req, res) => {
     let cid = req.params

@@ -1,0 +1,40 @@
+<h2>Este es el producto que buscó</h2>
+<p>ID: {{product._id}}</p>
+
+<button type="button" id="{{product._id}}" class="deleteProButton" onclick="deleteProduct()">Borrar Producto</button>
+
+<div>
+<a href="/products"><button>Volver a Productos</button></a>
+</div>
+
+<div id="message" style="margin-top: 10px;"></div>
+
+<script>
+    function deleteProduct() {
+        const urlPath = window.location.pathname;
+        const pid = urlPath.split('/').pop()
+        fetch(`/products/${pid}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },          
+        })
+        .then(response => response.json())
+        .then(data => {
+            const messageElement = document.getElementById('message');
+            if (data.status === 'success') {
+                messageElement.textContent = 'Producto eliminado exitosamente!';
+                messageElement.style.color = 'green';
+            } else {
+                messageElement.textContent = data.error || 'Error al eliminar el producto.';
+                messageElement.style.color = 'red';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = 'Error en la comunicación con el servidor.';
+            messageElement.style.color = 'red';
+        });
+    }
+</script>

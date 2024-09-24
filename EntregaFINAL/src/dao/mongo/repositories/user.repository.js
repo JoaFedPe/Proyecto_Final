@@ -8,4 +8,17 @@ const resetPass = async (user, hashedPassword) => {
           
 }
 
-export default {resetPass}
+const getUserById = async ({uid}) => {
+    
+    return await userModel.findOne({_id:uid}).lean()
+} 
+
+const changeRole = async (uid, newRole) => {
+
+    return await userModel.updateOne (
+        {_id: uid},
+        {rol: newRole}
+    )
+}
+
+export default {resetPass, changeRole, getUserById}

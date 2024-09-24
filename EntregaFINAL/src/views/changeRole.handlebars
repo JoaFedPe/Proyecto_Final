@@ -1,0 +1,27 @@
+<h2>Este es el usuario que buscó</h2>
+<p>ID: {{user._id}}</p>
+<p>role: {{user.rol}}</p>
+
+<button type="button" id="{{user._id}}" class="changeRol" onclick="changeRole('{{user._id}}')">Cambiar Rol</button>
+
+<script>
+    function changeRole(uid) {
+        fetch(`/users/premium/${uid}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.result === "success") {
+                alert('Rol modificado exitosamente!');
+                window.location.reload();
+            } else {
+                alert('Error al modificar el rol.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating the role.');
+        });
+    }
+</script>

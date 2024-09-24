@@ -1,7 +1,7 @@
 import { Router } from "express"
 import passport from 'passport'
-import {logUser, passForgotten} from '../../controllers/sessions.controllers.js'
-//import {passForgotten} from '../../controllers/sessions.controllers.js'
+import {logUser} from '../../controllers/sessions.controllers.js'
+
 
 
 const router = Router() 
@@ -18,7 +18,6 @@ router.get('/failregister', async (req, res) => {
 
 router.post('/login', passport.authenticate('login', { failureRedirect: 'faillogin' }), logUser)
 
-//router.post('/passforgotten', passForgotten)
 
 router.post('/logout', (req, res) => {
     req.session.destroy((err) => {

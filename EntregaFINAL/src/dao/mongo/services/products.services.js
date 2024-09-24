@@ -18,17 +18,17 @@ const getProducts = async (params) => {
 }
 
 const getProductsById = async (params) => {
-    const pid = params
-    let result = await productRepository.getProductsById(pid)
+    const {pid} = params
+    let result = await productRepository.getProductsById({pid})
     
     return result   
       
 }
 
-const createProduct = async (params) => {
+const createProduct = async (params, res) => {
     
-    let {title, description, code, price, status, stock, category} = params  
-    
+    let {title, description, code, price, status, stock, category, owner} = params 
+          
     if (!title || !description || !code || !price || !status || !stock || !category) {
         return ({ status: "error", error: "Faltan caracteristicas del producto"})        
     }
@@ -37,9 +37,9 @@ const createProduct = async (params) => {
         return ({ status: "error", error: "El producto que quieres agregar ya existe"})}
         else {
             
-            let product = await productRepository.createProduct({title, description, code, price, status, stock, category})
-            return ({result: "success", payload: product})
-    }        
+            let product = await productRepository.createProduct({title, description, code, price, status, stock, category, owner})
+            return ({status: "success", payload: product})
+    }         
 }
 
 
@@ -56,12 +56,17 @@ const modifyProduct = async (pid, params) => {
     
 }
 
-const deleteProduct = async (params) => {
+const deleteProduct = async (params, userEmail) => {
     const pid = params
+    const product = await productRepository.getProductsById({pid})
 
-    let result = await productRepository.deleteProduct(pid)
-    
-    return result   
+    if(userEmail === product.owner || userEmail === "adminCoder@coder.com"){
+                        
+        let result = await productRepository.deleteProduct(pid)
+        
+        return result
+
+    } else { return ({message: "No tienes permisos para borrar este producto"})}      
       
 }
     

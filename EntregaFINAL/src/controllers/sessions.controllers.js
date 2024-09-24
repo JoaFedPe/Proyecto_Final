@@ -32,5 +32,21 @@ const resetPass = async (req, res) => {
     res.json(passReset)
 }
 
+const getUserById = async (req, res) => {
+    const {uid}  = req.params
+    
+    let userById = await sessionServices.getUserById({uid})
+    
+    res.render('changeRole', {user: userById})
+}
 
-export {passForgotten, logUser, resetPass}
+const changeRole = async (req, res) => {
+    let {uid} = req.params
+    
+    let changeUserRole = await sessionServices.changeRole({uid})
+
+    res.json(changeUserRole)
+}
+
+
+export {passForgotten, logUser, resetPass, changeRole, getUserById}

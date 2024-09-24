@@ -47,7 +47,6 @@
 <h1>No hay productos que mostrar</h1>
 {{/if}}
 
-
 <script> 
     
     function addProduct(_id, cart){              
@@ -60,6 +59,20 @@
         },
         
     })
+    .then(response => response.json())
+        .then(data => {
+            if (data.result === "success") {
+                alert("Producto agregado al carrito"); 
+            } else {
+                alert(data.message || "Error al agregar producto al carrito"); 
+            }
+        })
+    .catch(error => {
+            console.error('Error:', error);
+            alert("Ocurrió un error al agregar el producto.");
+    });
 }
+
 </script>
+
 
