@@ -33,6 +33,20 @@ const deleteUser = async (req, res) => {
     
 }
 
+const deleteInactiveUser = async (req, res) => {
+    let now = new Date()
+    let thresholdDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000) // 30 días 
+    //let thresholdDate = new Date(now.getTime() - 2 * 60 * 1000) // 2 minutos  
+    
+    try {
+        const result = await sessionServices.deleteInactiveUser(thresholdDate);
+        res.json({ success: true, message: "Inactive users deleted successfully.", result });
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ success: false, message: "Error deleting inactive users.", error });
+    }
+}
+
 const passForgotten = async (req, res) => {
     const {email} = req.body
 
@@ -68,4 +82,4 @@ const changeRole = async (req, res) => {
 }
 
 
-export {passForgotten, logUser, resetPass, changeRole, getUserById, getUsers, deleteUser}
+export {passForgotten, logUser, resetPass, changeRole, getUserById, getUsers, deleteUser, deleteInactiveUser}

@@ -19,7 +19,8 @@ const userSchema = new mongoose.Schema({
         ]
     },
     purchases: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ticket' }],
-    rol: String
+    rol: String,
+    last_connection: {type: Date}
 });
 
 userSchema.pre('findOne', function(){

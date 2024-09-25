@@ -23,6 +23,33 @@ const deleteUser = async (params) => {
     return userToDelete
 }
 
+const deleteInactiveUser = async (thresholdDate) => {
+    try {
+        const inactiveUsers = await firstCollection.find({ last_connection: { $lt: thresholdDate } });
+        
+        if (inactiveUsers.length > 0) {
+            let results = [];
+            for (const user of inactiveUsers) {
+                let uid = user._id;
+                await userRepository.deleteUser(uid);                
+                await transport.sendMail({
+                    from: config.EMAIL_USER_NODEMAILER,
+                    to: user.email,
+                    subject: "Usuario Eliminado",
+                    html: `<p>Tu Usuario fue eliminado por inactividad</p>`
+                });
+                results.push({ uid, email: user.email });
+            }
+            return results;  // Return deleted user info
+        } else {
+            return [];  // No inactive users found
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        throw new Error("Error deleting inactive users.");
+    }
+}
+
 const logUserService =  (user, res) => {
    
     try{
@@ -130,4 +157,4 @@ const changeRole = async (params) => {
    
 }
 
-export default { logUserService, passForgotten, resetPass, changeRole, getUserById, getUsers, deleteUser }
+export default { logUserService, passForgotten, resetPass, changeRole, getUserById, getUsers, deleteUser, deleteInactiveUser }

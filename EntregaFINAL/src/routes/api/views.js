@@ -1,6 +1,6 @@
 import {Router} from 'express'
-import {isAuthenticated, isNotAuthenticated} from '../../middleware/auth.js'
-import {passForgotten, resetPass, changeRole, getUserById} from '../../controllers/sessions.controllers.js'
+import {isAuthenticated, isNotAuthenticated, isAdmin} from '../../middleware/auth.js'
+import {getUsers, getUserById} from '../../controllers/sessions.controllers.js'
 
 const router = Router()
 
@@ -28,12 +28,8 @@ router.get('/reset-password/:token', (req, res) => {
     res.render('reset-password')
 })
 
-router.post('/reset-password/:token', resetPass)
-
-router.post('/passforgotten', passForgotten)
+router.get ('/',isAdmin, getUsers)
 
 router.get('/users/premium/:uid', getUserById)
-
-router.put('/users/premium/:uid', changeRole)
 
 export default router

@@ -1,14 +1,14 @@
 import { Router } from "express"
 import passport from 'passport'
-import {logUser,getUsers, deleteUser} from '../../controllers/sessions.controllers.js'
+import {logUser,passForgotten, resetPass, changeRole, deleteUser, deleteInactiveUser} from '../../controllers/sessions.controllers.js'
 import {isAdmin} from '../../middleware/auth.js'
 
 
 const router = Router() 
 
-router.get ('/',isAdmin, getUsers)
-
 router.delete('/', isAdmin, deleteUser)
+
+router.delete('/', deleteInactiveUser)
 
 router.post('/register', passport.authenticate('register', { failureRedirect: 'failregister' }), async (req, res) => {
     res.redirect('/login')
@@ -40,5 +40,11 @@ router.get("/githubcallback",passport.authenticate("github",{failureRedirect:"/l
     req.session.user=req.user
     res.redirect("/products")
 })
+
+router.post('/reset-password/:token', resetPass)
+
+router.post('/passforgotten', passForgotten)
+
+router.put('/users/premium/:uid', changeRole)
 
 export default router

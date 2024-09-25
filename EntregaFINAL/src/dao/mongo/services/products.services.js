@@ -1,4 +1,5 @@
 import productRepository from '../repositories/product.repository.js'
+import transport from '../../../config/emailConfig.js'
 
 const getProducts = async (params) => {
     const {page=1, limit=10,category,sort, title} = params
@@ -63,6 +64,15 @@ const deleteProduct = async (params, userEmail) => {
     if(userEmail === product.owner || userEmail === "adminCoder@coder.com"){
                         
         let result = await productRepository.deleteProduct(pid)
+
+        await transport.sendMail({
+            from: config.EMAIL_USER_NODEMAILER,
+            to: product.owner,
+            subject: "Producto Eliminado",
+            html: `<p>El Admin a Eliminado un producto que te pertenece, revisa la lista de productos actualizada</p>`
+        })
+
+        console.log(product.owner)
         
         return result
 
