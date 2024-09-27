@@ -40,9 +40,9 @@ const deleteInactiveUser = async (thresholdDate) => {
                 });
                 results.push({ uid, email: user.email });
             }
-            return results;  // Return deleted user info
+            return results;  
         } else {
-            return [];  // No inactive users found
+            return [];  
         }
     } catch (error) {
         console.error("Error:", error);
@@ -86,7 +86,7 @@ const passForgotten = async (params) => {
         }
 
         const token = jwt.sign({ userId: user._id }, JWT_SECRETKEY, { expiresIn: '1h' })
-        const resetLink = `http://localhost:8080/reset-password/${token}`
+        const resetLink = `https://proyectofinal-production-6de7.up.railway.app/reset-password/${token}`
        
 
         await transport.sendMail({
