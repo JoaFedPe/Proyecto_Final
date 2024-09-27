@@ -1,9 +1,9 @@
 import express from 'express'
-import {isUser} from '../../middleware/auth.js'
+import {isUserOrPremium} from '../../middleware/auth.js'
 
 const router = express.Router()
 
-router.get('/chatEcommerce', isUser, (req, res) => {
+router.get('/chatEcommerce', isUserOrPremium, (req, res) => {
     res.render('chat', {})
 })
 
