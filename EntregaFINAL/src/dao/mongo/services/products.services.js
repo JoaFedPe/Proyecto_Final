@@ -12,8 +12,8 @@ const getProducts = async (params) => {
     if(title) filters.title= title
     if(sort) sortFilter.price = sort
     let result = await productRepository.getProducts ({filters,limit,page,sort:sortFilter})
-    result.prevLink = result.hasPrevPage ? `http://localhost:8080/products?page=${result.prevPage}&limit=${limit}` : ''
-    result.nextLink = result.hasNextPage ? `http://localhost:8080/products?page=${result.nextPage}&limit=${limit}` : ''
+    result.prevLink = result.hasPrevPage ? `https://proyectofinal-production-6de7.up.railway.app/products?page=${result.prevPage}&limit=${limit}` : ''
+    result.nextLink = result.hasNextPage ? `https://proyectofinal-production-6de7.up.railway.app/products?page=${result.nextPage}&limit=${limit}` : ''
     result.isValid = !(page <= 0 || page > result.totalPages)
     
     return result
